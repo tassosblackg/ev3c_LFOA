@@ -1,0 +1,16 @@
+
+***************Demos' Test Functionallity of DC-Motors and Servos***************************************
+--------------------| DC-motors |------------------------------------------------------------------------------
+demoR.c is main test file for moving the vehicle, writing to appropiate device file and move forward/backwards
+***init state****
+buf[5]={register's_address,motor1's_mode,motor1's_pwm,motor2's_pwm,motor2's_mode}
+
+***writing to move forward*****
+buf[3]={register's address,motor1's_pwm,-motor2's_pwm};
+
+--------------------------------%%%%SERVOS%%%%---------------------------------------------------------------------------
+demoS.c is main test of servo motor ,where trying to find the rotation angles tha were need ,for changing sonar direction
+
+buf[2]={register's address,value};
+
+****************************************************************************************************************************
