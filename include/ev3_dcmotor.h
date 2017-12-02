@@ -7,6 +7,8 @@
 **--------------------------------------------------------------------
 **->DC_motors + Servos connection Daisy Chain.
 **|address of the controller: is based -> on how we connect the controller's to the brick/
+**in our case we use input4 for controllers
+**and set input4 mode to :nxt-i2c 
 **@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 **___________________________________
 **author:soylisK <soylis.k@gmail.com>
@@ -18,7 +20,7 @@
 
 /**i2c-6 stands for i2c-(port_number+2), im my case my input port is 4**/
 #define dev_path "/dev/i2c-6" //!!changes it depends in which port you have connected your controller!!
-#define PWM_val 0x07    //value to run --for small distances 0x07-0x09 //speed set pwm 
+#define PWM_val 0x07    //value to run --for small distances 0x07-0x09 //speed set pwm
 #define PWM_brake 0x00 //brake value
 #define PWM_float -128//FFFF FFFF FFFF FF80???
 

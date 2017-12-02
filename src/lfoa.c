@@ -5,7 +5,11 @@
 **/
 
 /**set address for each controller in Daisy Chain connection**
-**look at :
+**-----------------------------------------------------------------------------
+**!!!IMPORTANT: set mode on the ev3 port ,where you have connected controllers
+** set ev3 input4(in our case) mode :ntx-i2c
+**-----------------------------------------------------------------------------
+**look at : HitechnicDoc folder
 **for More abut I2C **/
 #define dc_addr 0x01    //unshifted address (else 0x02/0x03)
 #define servo_addr 0x02 //unshifted address (else 0x04/0x05)

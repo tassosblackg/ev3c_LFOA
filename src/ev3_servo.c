@@ -1,11 +1,12 @@
 /**ev3_servo.c functions' body code
 **part of ev3c_LFOA project..main functionality of gyroscope servo-motor
 **author: soylisK <soylis.k@gmail.com>
+**
 **/
 #include "../include/ev3_servo.h"
 
 
-void init_s(servo **s,int8_t numbOfservos,char controller)
+void init_s(servo **s,int8_t numbOfservos,char mode,char controller)
 {
     if(numbOfservos>6)
         printf("Error:Servos' init()...numbOfservos mustn't be above 6/per controller..\n");
@@ -19,7 +20,7 @@ void init_s(servo **s,int8_t numbOfservos,char controller)
             for(i=0;i<numbOfservos/2;i++)
             {
                 (*s)->chanel_address[i]=(0x42)+i;
-                (*s)->value[i]=PWM_en_ton;
+                (*s)->value[i]=mode;
 
                 (*s)->buf[i+i]=(*s)->chanel_address[i]; //write address in the write position of buf
                 (*s)->buf[i+(i+1)]=(*s)->value[i];      //set the value in right position of buf
