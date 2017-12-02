@@ -10,15 +10,17 @@
 **___________________________________
 **author:soylisK <soylis.k@gmail.com>
 **-----------------------------------
+**controller register {address,channel1-value,chanel2_value...} //up to 6 values and one addressing
+** address is the starting point of writing in the register..writing is sequential
 **/
 
 #ifndef EV3_SRV
 #define EV3_SRV
 /**i2c-6 stands for i2c-(port_number+2), im my case my input port is 4**/
 #define dev_path "/dev/i2c-6" //!! changes in depend of which port you have connected your controller
-#define init_pos 0x7F //position of servo that we want to have at start
-#define turn_l 0xFF   //left position to rotate
-#define turn_r 0x00   //right position to rotate
+#define init_pos 0xA6 //position of servo that we want to have at start ..straight forward (166)
+#define turn_l 0x37   //left position to rotate(55)
+#define turn_r 0xFF   //right position to rotate(255)
 #define PWM_en_close 0xFF //close servo controller--stops
 #define PWM_en_toff 0xAA  //close timer mode
 #define PWM_en_ton 0x00   //open timer mode
@@ -35,8 +37,8 @@ typedef struct servo_motors{
 
   char chanel_address[6];  //one char for address of each chanel ,Hex --up to 6 servos/controller
   int8_t fd;              //file descriptor for device, where to write
-  char buf[12];           //buffer address ,value to write--each channel has one buf[2]
-  char value[6];
+  char buf[7];           //buffer address ,value to write--6values +1 register's address
+  char value[6];         //one value per channel of servos
   int8_t status;
   char step_time;
 }servo;
