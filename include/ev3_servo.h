@@ -8,13 +8,15 @@
 **->DC_motors + Servos connection Daisy Chain. in our case we use input4
 **and set input4 mode to :nxt-i2c
 **@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-**___________________________________
-**author:soylisK <soylis.k@gmail.com>
-**-----------------------------------
+**PLEASE connect servos sequential to channel & be carefull whivh of them you are using
 **controller register {address,channel1-value,chanel2_value...} //up to 6 values and one addressing
 ** address is the starting point of writing in the register..writing is sequential
 **More infos about Hitechnic Controllers addressing, modes, values check :HitechnicDoc
 **More infos about i2c :ev3dev.org drivers,sensors appendix
+
+**___________________________________
+**|author:soylisK <soylis.k@gmail.com>
+**-----------------------------------
 **/
 
 #ifndef EV3_SRV
@@ -27,6 +29,8 @@
 #define PWM_en_close 0xFF //close servo controller--stops
 #define PWM_en_toff 0xAA  //close timer mode
 #define PWM_en_ton 0x00   //open timer mode
+#define step_addr 0x041   //step time address in register
+#define PWM_addr 0x48     //Pwm enable address in register
 
 #include <fcntl.h>
 #include <unistd.h>
@@ -53,16 +57,17 @@ typedef struct servo_motors{
 **      - controller ,servo's controller address
 **/
 void init_s(servo **s,int8_t numbOfservos,char mode,char controller);
-/**turn servo to wanted position
+
+/**turn one servo to wanted position
 **ARgs: s servo node of struct typedef
 **      channel_i which servo you want to set from 0..5 (6servos)
 **      position value of servo to been set
 **      controller address of servo controller
 **/
-void turn(servo *s,int8_t chanel_i,char postion,char controller);
+void turn(servo *s,int8_t chanel_i,char position,char controller);
 
-void stop();
+
 /**free allocate memory of servo's node*/
-void delete(servo *s);
+void delete_s(servo *s);
 
 #endif

@@ -16,20 +16,18 @@ void init_s(servo **s,int8_t numbOfservos,char mode,char controller)
         if( ((*s)->fd)>0 )
         {
             ioctl((*s)->fd,I2C_SLAVE,controller);
-            int8_t i;
-            for(i=0;i<numbOfservos/2;i++)
+            unsigned char init_buf[2];
+            init_buf[0]=PWM_addr;
+            init_buf[1]=mode;
+            write(fd,init_buf,2); //init set servo mode
+            int8_t i,j;
+            for(i=0;i<numbOfservos;i++)
             {
                 (*s)->chanel_address[i]=(0x42)+i;
-                (*s)->value[i]=mode;
-
-                (*s)->buf[i+i]=(*s)->chanel_address[i]; //write address in the write position of buf
-                (*s)->buf[i+(i+1)]=(*s)->value[i];      //set the value in right position of buf
-
-                //each servo has 2 chars in buf {address,value}--so the length of the write buf-data it
-                //depends on the number of servos
-                write((*s)->fd,(*s)->buf,numbOfservos*2);
+                //(*s)->value[i]=;
 
             }
+
         }
         else
             printf("ERROR:fileDiscriptor i servos' inti() doesn't exists..");
@@ -37,16 +35,16 @@ void init_s(servo **s,int8_t numbOfservos,char mode,char controller)
     }
 }
 
-void turn(servo *s,int8_t chanel_i,char postion,char controller)
+void turn(servo *s,int8_t chanel_i,char position,char controller)
 {
     ioctl(s->fd,I2C_SLAVE,controller);
-    s->value[chanel_i]=postion;
-    s->buf[chanel_i+chanel_i]=s->chanel_address[chanel_i];
-    s->buf[chanel_i+chanel_i+1]=s->value[chanel_i];
+    s->value[chanel_i]=position;
+    s->buf[0]=s->chanel_address[chanel_i];
+    s->buf[1]=position;
     write(s->fd,s->buf,2);
 }
 
-void delete(servo *s)
+void delete_s(servo *s)
 {
     free(s);
 }

@@ -11,26 +11,27 @@
 **-----------------------------------------------------------------------------
 **look at : HitechnicDoc folder
 **for More abut I2C **/
+
 #define dc_addr 0x01    //unshifted address (else 0x02/0x03)
 #define servo_addr 0x02 //unshifted address (else 0x04/0x05)
 #define PWM_1 0x30  //Pulse Width Modulation ,motors value
-#include "ev3_all.h"
+#include "../include/ev3_all.h"
 void line_follow();
 void obstacle_avoidance();
 
 
 int main()
 {
-    dc_m *motors_node=(dc_m *)malloc(sizeof(dc_m));
-    servos *servo_node=(servos*)malloc(sizeof(servos));
-    sensor *sensor_list=(sensor*)malloc(sizeof(sensor));
+    dc_m *motors_node=(dc_m *)malloc(sizeof(dc_m)); //one node for motors controler(2motors)
+    servo *servo_node=(servo*)malloc(sizeof(servo)); //one node for servo controller(up to 6 servos)
+    sensor *sensor_list=(sensor*)malloc(sizeof(sensor)); //lego sensor nodes list
 
-    if( (motors_node!=NULL)&&(servo_node!=NULL) )
+    if( (motors_node!=NULL)&&(servo_node!=NULL) &&(sensor_list!=NULL))
     {
-      /*initialize motors and servos*/
-      init_m(motors_node,dc_addr);
-      init_s(servo_node,servo_addr);
-
+      /*initialize motors , servos and sensors*/
+      init_m(&motors_node,dc_addr);
+      init_s(&servo_node,1,PWM_en_toff,servo_addr);
+      append2list(&sensor_list);
 
     }
     else
@@ -42,13 +43,13 @@ int main()
 
 /**functions bodies'****************/
 
-void line_follow(dc_m *m,servos *s)
+void line_follow(dc_m *m,servo *s)
 {
 
 
 }
 
-void obstacle_avoidance(dc_m *m,servos *s)
+void obstacle_avoidance(dc_m *m,servo *s)
 {
 
 }

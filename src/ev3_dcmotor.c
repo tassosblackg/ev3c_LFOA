@@ -23,7 +23,7 @@ void init_m(dc_m **m,char controller)
 				(*m)->buf[3]=0x00; //pwm motor2
 				(*m)-.buf[4]=0x00; //mode motor2
 				write((*m)->fd,(*m)->buf,5);
-				
+
 				//close(m->fd);
 		}
 		else
@@ -56,7 +56,7 @@ void stop(dc_m *m,char controller)
 
 }
 
-void delete(dc_m *m)
+void delete_m(dc_m *m)
 {
 		free(m);
 }
