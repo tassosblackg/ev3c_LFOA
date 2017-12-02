@@ -11,15 +11,19 @@ void init_m(dc_m **m,char controller)
 		if( ((*m)->fd) >0)
 		{
 				ioctl((*m)->fd,I2C_SLAVE,controller);
-				(*m)->motors[0]=0x44;
-				(*m)->motors[1]=0x47;
+				(*m)->mode_motor[0]=0x44; //motor1's mode address
+				(*m)->mode_motor[1]=0x47; //motor2's mode address
+				//motors' pwm addresses
+				(*m)->motors[0]=0x45; //motor1
+				(*m)->motors[1]=0x46; //motor2
 				//set mode for 1st motor
-				(*m)->buf[0]=(*m)->motors[0];
-				(*m)->buf[1]=0x00;
-				(*m)->buf[2]=(*m)->motors[1];
-				(*m)->buf[3]=0x00;
-				write((*m)->fd,(*m)->buf,4);
-
+				(*m)->buf[0]=(*m)->mode_motor[0];
+				(*m)->buf[1]=0x00; //mode motor1
+				(*m)->buf[2]=0x00; //pwm motor1
+				(*m)->buf[3]=0x00; //pwm motor2
+				(*m)-.buf[4]=0x00; //mode motor2
+				write((*m)->fd,(*m)->buf,5);
+				
 				//close(m->fd);
 		}
 		else
@@ -34,9 +38,8 @@ void run(dc_m *m,char value1,char value2,char controller)
 		m->buf[0]=m->motors[0];
 		m->buf[1]=value1;
 		//set 2nd motor value
-		m->buf[2]=m->motors[1];
-		m->buf[3]=value2;
-		write(m->fd,m->buf,4);
+		m->buf[2]=value2;
+		write(m->fd,m->buf,3);
 		//close(m->fd);
 
 }
@@ -45,13 +48,11 @@ void stop(dc_m *m,char controller)
 {
 		ioctl(m->fd,I2C_SLAVE,controller);
 		//set 1st motor value
-		m->buf[0]=m->motors[0];
+		m->buf[0]=m->motors[0];// motor1 pwm address
 		m->buf[1]=PWM_brake;
-
 		//set 2nd motor value
-		m->buf[2]=m->motors[1];
-		m->buf[3]=PWM_brake;
-		write(m->fd,m->buf,4);
+		m->buf[2]=PWM_brake;
+		write(m->fd,m->buf,3);
 
 }
 

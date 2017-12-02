@@ -18,7 +18,7 @@
 
 /**i2c-6 stands for i2c-(port_number+2), im my case my input port is 4**/
 #define dev_path "/dev/i2c-6" //!!changes it depends in which port you have connected your controller!!
-#define PWM_val 0x32    //calue to run
+#define PWM_val 0x07    //value to run --for small distances 0x07-0x09 //speed set pwm 
 #define PWM_brake 0x00 //brake value
 #define PWM_float -128//FFFF FFFF FFFF FF80???
 
@@ -35,7 +35,7 @@ typedef struct vehicle_dc_motors{
   char mode_motor[2];      //mode address to motor1,2    ,Hex
   char motors[2];         // "left or right" motor address Motor1,2 ,Hex
   int8_t fd;         // fd file to write/read in device
-  char buf[4];      // buffer where we write motorAddress, and value in Hex
+  char buf[5];      // buffer where we write motorAddress, and value in Hex
 
 }dc_m;
 
@@ -45,9 +45,9 @@ typedef struct vehicle_dc_motors{
 **      controller, dc_motor's controller address
 **MODES:
 **________________________
-**|0b00 |PWM             |
-**|0b01 |Speed controller|
-**|0b10 |Position Control|
+**|0x00 |PWM             |
+**|0x01 |Speed controller|
+**|0x10 |Position Control|
 **|_____|________________|
 **/
 void init_m(dc_m **m,char controller);
