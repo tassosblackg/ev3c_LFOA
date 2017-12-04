@@ -57,6 +57,7 @@ sensor *load_sensor(uint8_t fn)
     char *filep=NULL;
     /*read driver_name*/
     filep=chpath(sensor_name,0,strlen(driverf),driverf);
+    printf("1chpath=%s\n",filep);
     sensor_node->driver =readData(filep);
     /*set_identifier*/
     /*filep=chpath(sensor_name,stlen(driverf),strlen(),);
@@ -64,18 +65,23 @@ sensor *load_sensor(uint8_t fn)
     /*set port*/
     filep=chpath(sensor_name,strlen(sensor_node->driver),strlen(portf),portf);
     sensor_node->port=readData(filep);
+    printf("2chpath=%s\n",filep);
     /*set fd*/
 		filep=chpath(sensor_name,strlen(portf),strlen(dataf),dataf);
 		sensor_node->fd=filep;
+    printf("3chpath=%s\n",filep);
     /*set data*/
     filep=chpath(sensor_name,strlen(portf),strlen(dataf),dataf);
     sensor_node->data=atoi(readData(filep));
+    printf("4chpath=%s\n",filep);
     /*set poll time*/
     filep=chpath(sensor_name,strlen(dataf),strlen(pollf),pollf);
     sensor_node->poll_time=atoi(readData(filep));
+    printf("5chpath=%s\n",filep);
     /*set mode*/
     filep=chpath(sensor_name,strlen(pollf),strlen(modef),modef);
     sensor_node->mode= readData(filep);
+    printf("6chpath=%s\n",filep);
 
     /*set next node's pointer*/
     sensor_node->next=NULL; //init state
@@ -108,7 +114,7 @@ void append2list(sensor **slist)
 
 void update_sensor_value(sensor *s)
 {
-		s->data=atoi(readData(s->fd));
+		s->data=atoi(readData(s->fd)); //read from file where is the value data
 }
 
 sensor *search4sensor(sensor *slist,char *port_name)

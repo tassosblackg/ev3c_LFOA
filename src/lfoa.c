@@ -15,7 +15,7 @@
 #define dc_addr 0x01    //unshifted address (else 0x02/0x03)
 #define servo_addr 0x02 //unshifted address (else 0x04/0x05)
 #define PWM_1 0x30  //Pulse Width Modulation ,motors value
-#include "../include/ev3_all.h"
+#include "ev3_all.h"
 void line_follow();
 void obstacle_avoidance();
 

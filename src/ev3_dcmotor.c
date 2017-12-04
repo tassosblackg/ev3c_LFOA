@@ -2,7 +2,7 @@
 **part of ev3c_LFOA project
 **author: soylisK <soylis.k@gmail.com>
 **/
-#include "../include/ev3_dcmotor.h"
+#include "ev3_dcmotor.h"
 
 
 void init_m(dc_m **m,char controller)
@@ -21,7 +21,7 @@ void init_m(dc_m **m,char controller)
 				(*m)->buf[1]=0x00; //mode motor1
 				(*m)->buf[2]=0x00; //pwm motor1
 				(*m)->buf[3]=0x00; //pwm motor2
-				(*m)-.buf[4]=0x00; //mode motor2
+				(*m)->buf[4]=0x00; //mode motor2
 				write((*m)->fd,(*m)->buf,5);
 
 				//close(m->fd);

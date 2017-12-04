@@ -1,4 +1,4 @@
-#include "../include/ev3_file.h"
+#include "ev3_file.h"
 
 
 char *readData(char *fname)

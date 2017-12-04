@@ -3,7 +3,7 @@
 **author: soylisK <soylis.k@gmail.com>
 **
 **/
-#include "../include/ev3_servo.h"
+#include "ev3_servo.h"
 
 
 void init_s(servo **s,int8_t numbOfservos,char mode,char controller)
@@ -19,7 +19,7 @@ void init_s(servo **s,int8_t numbOfservos,char mode,char controller)
             unsigned char init_buf[2];
             init_buf[0]=PWM_addr;
             init_buf[1]=mode;
-            write(fd,init_buf,2); //init set servo mode
+            write((*s)->fd,init_buf,2); //init set servo mode
             int8_t i,j;
             for(i=0;i<numbOfservos;i++)
             {
