@@ -18,12 +18,12 @@
 #define str_len 15
 #define sensor_driver_path "/sys/class/lego-sensor"
 #define filesName "sensor" //files' name in sensor_driver_path
-#define fullpath "/sys/class/lego_sensor/sensor"
+#define fullpath "/sys/class/lego-sensor/sensor"
 #define driverf "/driver_name" //sensor's driver's name file
-#define portf  "address" //port name
-#define modef   "mode"   //mode of sensor
-#define pollf   "poll_ms" //polling time file
-#define dataf  "value0"  //useful sensors data
+#define portf  "/address" //port name
+#define modef   "/mode"   //mode of sensor
+#define pollf   "/poll_ms" //polling time file
+#define dataf  "/value0"  //useful sensors data
 uint8_t numbOfSen;  //how many sensors are connected to the brick
 
 
@@ -93,7 +93,7 @@ int8_t countSensor();
 **      |-str_add   :file's name to concat to the init path
 **Returns: a string of file's (to read) fullpath
 **/
-char *chpath(char *init_path,int8_t length_dn,int8_t lenght_up,char *str_add);
+char *chpath(char *init_path,int8_t lenght_up,char *str_add);
 
 /**read sensors new value0**/
 void update_sensor_value(sensor *s);

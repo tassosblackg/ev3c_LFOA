@@ -1,14 +1,16 @@
 #include "ev3_file.h"
-
+#define line_length 20
 
 char *readData(char *fname)
 {
     FILE *fp;
     char *line=NULL;
+    ssize_t len=0;
     fp=fopen(fname,"r");
     if(fp!=NULL)
     {
-      int8_t error_n=fscanf(fp,"%s",line);
+      ssize_t error_n=getline(&line,&len,fp);
+      printf("lineR=%s\n",line);
       if(error_n<0)
         printf("@error during reading file...\n");
     }

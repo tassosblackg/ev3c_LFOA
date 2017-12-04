@@ -32,9 +32,11 @@ int8_t  countSensors()
 
 }
 
-char *chpath(char *init_path,int8_t length_dn,int8_t lenght_up,char *str_add)
+char *chpath(char *init_path,int8_t lenght_up,char *str_add)
 {
-    int8_t str_size = strlen(init_path)-length_dn+lenght_up+1;//set the right size of string
+    printf("path=%s\n",init_path);
+    int8_t str_size = strlen(init_path)+lenght_up+1;//set the right size of string
+    printf("str-size=%d\n",str_size);
     char *strR =(char*)malloc(str_size);
     strcpy(strR,init_path);
     strcat(strR,str_add);
@@ -54,38 +56,39 @@ sensor *load_sensor(uint8_t fn)
     sprintf(itoa,"%d",fn);          //int to string
     strcpy(sensor_name,fullpath);  //copy fullpath string to a new variable
     strcat(sensor_name,itoa);     //concat fullpath with sensor name
+    free(itoa);
     char *filep=NULL;
     /*read driver_name*/
-    filep=chpath(sensor_name,0,strlen(driverf),driverf);
+    filep=chpath(sensor_name,strlen(driverf),driverf);
     printf("1chpath=%s\n",filep);
-    sensor_node->driver =readData(filep);
+    sensor_node->driver =readData(filep); //<-okk ****DEBUG
+    printf("DRIVERPathlen=%d\n",strlen(filep));
+    printf("PORT_len=%d\n",strlen(portf));
     /*set_identifier*/
     /*filep=chpath(sensor_name,stlen(driverf),strlen(),);
     sensor_node->id=get_sensor_id(readData(filep));*/
     /*set port*/
-    filep=chpath(sensor_name,strlen(sensor_node->driver),strlen(portf),portf);
+    filep=chpath(sensor_name,strlen(portf),portf);
     sensor_node->port=readData(filep);
     printf("2chpath=%s\n",filep);
     /*set fd*/
-		filep=chpath(sensor_name,strlen(portf),strlen(dataf),dataf);
+		filep=chpath(sensor_name,strlen(dataf),dataf);
 		sensor_node->fd=filep;
     printf("3chpath=%s\n",filep);
-    /*set data*/
-    filep=chpath(sensor_name,strlen(portf),strlen(dataf),dataf);
     sensor_node->data=atoi(readData(filep));
     printf("4chpath=%s\n",filep);
     /*set poll time*/
-    filep=chpath(sensor_name,strlen(dataf),strlen(pollf),pollf);
+    filep=chpath(sensor_name,strlen(pollf),pollf);
     sensor_node->poll_time=atoi(readData(filep));
     printf("5chpath=%s\n",filep);
     /*set mode*/
-    filep=chpath(sensor_name,strlen(pollf),strlen(modef),modef);
+    filep=chpath(sensor_name,strlen(modef),modef);
     sensor_node->mode= readData(filep);
     printf("6chpath=%s\n",filep);
 
     /*set next node's pointer*/
     sensor_node->next=NULL; //init state
-
+    free(sensor_name);
 		return sensor_node;
 
 }
