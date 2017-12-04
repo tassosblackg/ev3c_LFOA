@@ -32,7 +32,7 @@ void init_s(servo **s,int8_t numbOfservos,char mode,char controller)
 
         }
         else
-            printf("ERROR:fileDiscriptor i servos' inti() doesn't exists..");
+            printf("ERROR:fileDiscriptor i servos' init() doesn't exists..");
 
     }
 }

@@ -9,6 +9,7 @@
 **!!!IMPORTANT: set mode on the ev3 port ,where you have connected controllers
 ** set ev3 input4(in our case) mode :ntx-i2c
 **-----------------------------------------------------------------------------
+**Cross-Compile with Docker: docker run --rm --it -v /c/Users/myname/example/:/src -w /src ev3cc
 **look at : HitechnicDoc folder
 **for More abut I2C **/
 

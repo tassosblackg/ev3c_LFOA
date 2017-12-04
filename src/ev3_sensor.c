@@ -93,8 +93,9 @@ sensor *load_sensor(uint8_t fn)
 void append2list(sensor **slist)
 {
 		numbOfSen=countSensors(); //number of coonected sensors
+    printf("There are %d sensors connected..\n",numbOfSen);
 		uint8_t i;
-		for(i=0;i<numbOfSen;i++)
+		for(i=1;i<=numbOfSen;i++)
 		{
 				sensor *tmp=NULL,*node=NULL;
 				// sensor *node=(sensor*)malloc(sizeof(sensor)); //alocate mem for a sensor node
@@ -121,7 +122,7 @@ sensor *search4sensor(sensor *slist,char *port_name)
 {
 		sensor *node=NULL,*tmp=slist;
 		uint8_t i;
-		for( i=0;i<numbOfSen;i++)
+		for( i=1;i<=numbOfSen;i++)
 		{
 				if(strcmp(tmp->port,port_name)==0 )
 				{

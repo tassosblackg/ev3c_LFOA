@@ -19,7 +19,7 @@
 #define sensor_driver_path "/sys/class/lego-sensor"
 #define filesName "sensor" //files' name in sensor_driver_path
 #define fullpath "/sys/class/lego_sensor/sensor"
-#define driverf "driver_name" //sensor's driver's name file
+#define driverf "/driver_name" //sensor's driver's name file
 #define portf  "address" //port name
 #define modef   "mode"   //mode of sensor
 #define pollf   "poll_ms" //polling time file
