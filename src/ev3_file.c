@@ -8,7 +8,9 @@ char *readData(char *fname)
     fp=fopen(fname,"r");
     if(fp!=NULL)
     {
-      fscanf(fp,"%s",line);
+      int8_t error_n=fscanf(fp,"%s",line);
+      if(error_n<0)
+        printf("@error during reading file...\n");
     }
     else
       printf("ERROR FILE %s COULDN'T BE OPEN\n",fname);

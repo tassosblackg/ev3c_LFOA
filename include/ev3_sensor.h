@@ -24,7 +24,7 @@
 #define modef   "mode"   //mode of sensor
 #define pollf   "poll_ms" //polling time file
 #define dataf  "value0"  //useful sensors data
-uint8_t numbOfSen=0;  //how many sensors are connected to the brick
+uint8_t numbOfSen;  //how many sensors are connected to the brick
 
 
 

@@ -9,7 +9,7 @@
 void init_s(servo **s,int8_t numbOfservos,char mode,char controller)
 {
     if(numbOfservos>6)
-        printf("Error:Servos' init()...numbOfservos mustn't be above 6/per controller..\n");
+        printf("Error:Servos' init()...number Of servos mustn't be above 6/per controller..\n");
     else
     {
         (*s)->fd=open(dev_path,O_RDWR);
@@ -19,7 +19,9 @@ void init_s(servo **s,int8_t numbOfservos,char mode,char controller)
             unsigned char init_buf[2];
             init_buf[0]=PWM_addr;
             init_buf[1]=mode;
-            write((*s)->fd,init_buf,2); //init set servo mode
+            int8_t wr=write((*s)->fd,init_buf,2); //init set servo mode
+            if(wr<0)
+              printf("ERROR during writing in init_s() function-servos..\n");
             int8_t i,j;
             for(i=0;i<numbOfservos;i++)
             {
@@ -41,7 +43,9 @@ void turn(servo *s,int8_t chanel_i,char position,char controller)
     s->value[chanel_i]=position;
     s->buf[0]=s->chanel_address[chanel_i];
     s->buf[1]=position;
-    write(s->fd,s->buf,2);
+    int8_t wr=write(s->fd,s->buf,2);
+    if(wr<0)
+      printf("@ERROR during writing in turn() function-servos..\n");
 }
 
 void delete_s(servo *s)

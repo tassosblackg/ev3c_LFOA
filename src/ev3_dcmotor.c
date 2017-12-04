@@ -22,8 +22,9 @@ void init_m(dc_m **m,char controller)
 				(*m)->buf[2]=0x00; //pwm motor1
 				(*m)->buf[3]=0x00; //pwm motor2
 				(*m)->buf[4]=0x00; //mode motor2
-				write((*m)->fd,(*m)->buf,5);
-
+				int8_t wr=write((*m)->fd,(*m)->buf,5);
+				if(wr<0)
+					printf("@ERROR during write in init_m() function\n");
 				//close(m->fd);
 		}
 		else
@@ -39,7 +40,9 @@ void run(dc_m *m,char value1,char value2,char controller)
 		m->buf[1]=value1;
 		//set 2nd motor value
 		m->buf[2]=value2;
-		write(m->fd,m->buf,3);
+		int8_t wr=write(m->fd,m->buf,3);
+		if(wr<0)
+			printf("@ERROR during write in run() function -dc_motor..\n");
 		//close(m->fd);
 
 }
@@ -52,7 +55,9 @@ void stop(dc_m *m,char controller)
 		m->buf[1]=PWM_brake;
 		//set 2nd motor value
 		m->buf[2]=PWM_brake;
-		write(m->fd,m->buf,3);
+		int8_t wr=write(m->fd,m->buf,3);
+		if(wr<0)
+			printf("@ERROR during write in stop() function -dc_motor..\n");
 
 }
 
