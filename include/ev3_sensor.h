@@ -54,7 +54,7 @@ typedef struct sens_struct{
 **args:fileNumber--how many sensors?
 **REturns : a pointer to a linked list
 **/
-sensor *load_sensor(uint8_t fn);
+void load_sensor(uint8_t fn,sensor **sensor_node);
 /**append2list
 ** append a sensor node to a list
 ** Args: sl -> address of sensor's nodes list

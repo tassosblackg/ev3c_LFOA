@@ -25,14 +25,23 @@ int main()
 {
     dc_m *motors_node=(dc_m *)malloc(sizeof(dc_m)); //one node for motors controler(2motors)
     servo *servo_node=(servo*)malloc(sizeof(servo)); //one node for servo controller(up to 6 servos)
-    sensor *sensor_list=(sensor*)malloc(sizeof(sensor)); //lego sensor nodes list
+    sensor *sensor_list=NULL; //lego sensor nodes list
 
-    if( (motors_node!=NULL)&&(servo_node!=NULL) &&(sensor_list!=NULL))
+    if( (motors_node!=NULL)&&(servo_node!=NULL) )
     {
       /*initialize motors , servos and sensors*/
       init_m(&motors_node,dc_addr);
       init_s(&servo_node,1,PWM_en_toff,servo_addr);
       append2list(&sensor_list);
+      if (sensor_list!=NULL)
+      {
+        //yeah
+        printf("everything is fine\n");
+      }
+      else
+        printf("sensor_list not allocated..\n");
+
+
 
     }
     else
