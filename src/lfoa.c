@@ -20,7 +20,7 @@
 #define servo_addr 0x02    //unshifted address (else 0x04/0x05)
 #define PWM_max 0x9        //Pulse Width Modulation ,dc-motors value
 #define error_code -127  //error return value
-#define crash_dist 28   //minimum distance to avoid Obstacle
+#define crash_dist 230   //minimum distance in(mm) to avoid Obstacle
 #define threshold_intensity 77 //color of line to follow --white (*)
 #define left_thres 32 //greater than 32 but way less than 70 (*)
 #define right_thres 26 // less than that                      (*)
@@ -28,12 +28,13 @@
 #define false 0
 
 
-#include "ev3_all.h"
+#include "../include/ev3_all.h"
 
 /*fuctions headers*/
 void line_follow(dc_m *m,servo *s,sensor *slist);
 void obstacle_avoidance(dc_m *m,servo *s,sensor *slist);
 int8_t take_measurement(sensor *slist,char *input_name);
+void avoid_circle(dc_m *m, servo *s,sensor *slist, char side); // side arg :=>'L':for left turn side,'R':for right
 int8_t movement_side(dc_m *m,servo *s,sensor *slist,int8_t pos,int8_t chanel_i,int8_t Mr,int8_t Ml);
 
 int main()
@@ -52,6 +53,11 @@ int main()
       {
         //yeah
         printf("everything is fine\n");
+        turn(servo_node,0,init_pos,servo_addr);
+        //line_follow(motors_node,servo_node,sensor_list);
+        sensor *s2;
+	      s2=search4sensor(sensor_list,"in3");
+	      printf("@s2=%d\n",s2);
       }
       else
         printf("sensor_list not allocated..\n");
@@ -81,45 +87,57 @@ void line_follow(dc_m *m,servo *s,sensor *slist)
     {
 
       int8_t distance =take_measurement(slist,"in3");  //sonar sensor
-      if(distance>crash_dist) //it's safe ..not danger of crashing
+      if(distance==error_code) //read new value from sensor fails
+        printf("Error in line_follow() distance=take_measurement\n");
+      else//e2
       {
-        int8_t last_value =take_measurement(slist,"in2"); //color sensor in input2
-        /********|calculate turn_factor,aka smoothness of turn|**********************/
-        error=threshold_intensity-last_value;
-        integral+=error;
-        dirivative=error - last_error;
-        last_error=error;
-        /**test and try to keep turn_factor<1,because you don't want to overpower motors*/
-        turn_factor=(error*Kp + integral*Ki + dirivative*Kd)/threshold_intensity;
-        /******************************************************************************/
-        if((last_value>=left_thres)&&(last_value<threshold_intensity))//out of line from left
-        {
-          //calculate turn_factor
-          //make the turn
-          Mr=turn_factor*PWM_max;
-          run(m,Mr,-Ml,dc_addr);
+          if(distance>crash_dist) //it's safe ..not danger of crashing
+          {//ifd
+            int8_t last_value =take_measurement(slist,"in2"); //color sensor in input2
+            if(last_value==error_code)
+              printf("Error in line_follow() last_value=take_measurement\n");
+            else //e3
+            {
+                /********|calculate turn_factor,aka smoothness of turn|**********************/
+                error=threshold_intensity-last_value;
+                integral+=error;
+                dirivative=error - last_error;
+                last_error=error;
+                /**test and try to keep turn_factor<1,because you don't want to overpower motors*/
+                turn_factor=(error*Kp + integral*Ki + dirivative*Kd)/threshold_intensity;
+                /******************************************************************************/
+                if((last_value>=left_thres)&&(last_value<threshold_intensity))//out of line from left
+                {
+                  //calculate turn_factor
+                  //make the turn
+                  Mr=turn_factor*PWM_max;
+                  run(m,Mr,-Ml,dc_addr);
 
-        }
-        if( (last_value>=right_thres)&&(last_value<left_thres)) //out of line from right
-        {
-          //calculate turn_factor
-          //make turn
-          Ml=turn_factor*PWM_max;
-          run(m,Mr,-Ml,dc_addr);
-        }
-        if(last_value>=threshold_intensity) //in line
-        {
-          //move forward
-          Mr=Ml=PWM_max; //just to be sure
-          run(m,Mr,-Ml,dc_addr);
-        }
-      }
-      else
-      {
-        //obstacle_avoidance
-        obstacle_avoidance(m,s,slist);
-      }
-    }
+                }
+                if( (last_value>=right_thres)&&(last_value<left_thres)) //out of line from right
+                {
+                  //calculate turn_factor
+                  //make turn
+                  Ml=turn_factor*PWM_max;
+                  run(m,Mr,-Ml,dc_addr);
+                }
+                if(last_value>=threshold_intensity) //in line
+                {
+                  //move forward
+                  Mr=Ml=PWM_max; //just to be sure
+                  run(m,Mr,-Ml,dc_addr);
+                }
+                else
+                {
+                  //obstacle_avoidance
+                  obstacle_avoidance(m,s,slist);
+                }
+              }//e3
+          }//ifd
+
+
+        }//e2
+    }//while
 
 }
 
@@ -131,27 +149,19 @@ void obstacle_avoidance(dc_m *m,servo *s,sensor *slist)
   //check distance
   int8_t distance=take_measurement(slist,"in3");
   int8_t init_angle=take_measurement(slist,"in3"); //what's your direction
-  //1st turn right move forward
-  int8_t flag = movement_side(m,s,slist,turn_r,0,PWM_max/2,PWM_max); //1st servo chanel is 0
-  if(flag) //i can go so move forward
-  {
-      run(m,PWM_max,-PWM_max,dc_addr);
-  }
+  if((distance ==error_code)||(init_angle==error_code))
+    printf("Error in obstacle_avoidance() --take_measurement..\n");
   else
-     stop(m,dc_addr);
-  //2nd turn left and move forward
-  int8_t flag = movement_side(m,s,slist,turn_l,0,PWM_max,PWM_max/2); //1st servo chanel is 0
-  if(flag) //i can go so move forward
   {
-      run(m,PWM_max,-PWM_max,dc_addr);
+      //1st turn right move forward
+      avoid_circle(m,s,slist,'R');
+      //2nd turn left and move forward
+      avoid_circle(m,s,slist,'L');
+      //3d turn left again
+      avoid_circle(m,s,slist,'R');
+      //4th turn right again
+      avoid_circle(m,s,slist,'L');
   }
-  else
-     stop(m,dc_addr);
-  //3d turn left again
-
-  //4th turn right again
-
-
 
 }
 
@@ -179,17 +189,46 @@ int8_t movement_side(dc_m *m,servo *s,sensor *slist,int8_t pos,int8_t chanel_i,i
     int8_t rv=false; //return value
     turn(s,chanel_i,pos,servo_addr);
     int8_t distance=take_measurement(slist,"in3"); //take measurement from sonar
-    if(distance>crash_dist)
-    {
-
-      run(m,Mr,-Ml,dc_addr); //turn vehicle to that position..right
-      turn(s,chanel_i,init_pos,servo_addr); //turn servo straight forward
-      rv=true;
-    }
+    if(distance==error_code)
+        printf("Error in movement_side() take_measurement..\n");
     else
     {
-      printf("I can't turn to that side..\n");
-      rv=false;
-    }
+        if(distance>crash_dist)
+        {
+
+          run(m,Mr,-Ml,dc_addr); //turn vehicle to that position..right
+          turn(s,chanel_i,init_pos,servo_addr); //turn servo straight forward
+          rv=true;
+        }
+        else
+        {
+          printf("I can't turn to that side..\n");
+          rv=false;
+        }
+      }
     return(rv);
+}
+
+void avoid_circle(dc_m *m, servo *s,sensor *slist, char side)
+{
+    if (side=='R')
+    {
+      /* code */
+      int8_t flag = movement_side(m,s,slist,turn_r,0,PWM_max/2,PWM_max); //1st servo chanel is 0
+      if(flag) //i can go so move forward
+        run(m,PWM_max,-PWM_max,dc_addr);
+      else
+        stop(m,dc_addr);
+    }
+    else if(side=='L')
+    {
+      int8_t flag = movement_side(m,s,slist,turn_l,0,PWM_max,PWM_max/2); //1st servo chanel is 0
+      if(flag) //i can go so move forward
+        run(m,PWM_max,-PWM_max,dc_addr);
+      else
+        stop(m,dc_addr);
+    }
+    else
+      printf("error:invalid side argument, side='L'or'R'..check avoid_circle() call\n ");
+
 }

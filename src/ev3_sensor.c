@@ -99,7 +99,7 @@ void append2list(sensor **slist)
 		numbOfSen=countSensors(); //number of coonected sensors
     printf("There are %d sensors connected..\n",numbOfSen);
     (*slist)=(sensor *)malloc(sizeof(sensor)*numbOfSen); //allocate the right size of memory
-    sensor *tmp=NULL,*node;
+    sensor *tmp=NULL;
     if((*slist)==NULL)
       printf("error sensor_list allocation in append..\n");
 		uint8_t i;
@@ -111,7 +111,7 @@ void append2list(sensor **slist)
 				// sensor *node=(sensor*)malloc(sizeof(sensor)); //alocate mem for a sensor node
         //checkare pws metavaineis apo enan komvo ston kainourgio??
         //prepei na dhmiourgeis kainourgio node kai na to prostheteis sthn lista
-        node=(sensor *)malloc(sizeof(sensor)); //create a sensor node
+        sensor *node=(sensor *)malloc(sizeof(sensor)); //create a sensor node
         if(node==NULL)
           printf("error durin node allocation...in append\n");
 				load_sensor(i,&node);    //add sensor data in the node
@@ -133,7 +133,7 @@ void append2list(sensor **slist)
 						tmp=node;
             printf("new tmp=%d\n",tmp);
 				}
-        free(node); //free space for node..so it's can be reallocate
+        //free(node); //free space for node..so it's can be reallocate
         printf("telos epanalh4hs\n");
 		}
 
