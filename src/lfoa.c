@@ -24,11 +24,13 @@
 #define threshold_intensity 77 //color of line to follow --white (*)
 #define left_thres 32 //greater than 32 but way less than 70 (*)
 #define right_thres 26 // less than that                      (*)
+#define true 1
+#define false 0
 #include "ev3_all.h"
 void line_follow(dc_m *m,servo *s,sensor *slist);
 void obstacle_avoidance(dc_m *m,servo *s,sensor *slist);
 int8_t take_measurement(sensor *slist,char *input_name);
-float pid_controll();
+int8_t movement_side(dc_m *m,servo *s,sensor *slist,int8_t pos,int8_t chanel_i);
 
 int main()
 {
@@ -70,11 +72,11 @@ void line_follow(dc_m *m,servo *s,sensor *slist)
     Kp=0.3;        //(*)
     Ki=0.2;       //(*)
     Kd=0.013;    //(*)
-    int8_t error=0,intergral=0,dirivative=0,last_error=0;
+    int8_t error=0,integral=0,dirivative=0,last_error=0;
     while (1)
     {
 
-      int8_t dinstance =take_measurement(slist,"in3");  //sonar sensor
+      int8_t distance =take_measurement(slist,"in3");  //sonar sensor
       if(distance>crash_dist) //it's safe ..not danger of crashing
       {
         int8_t last_value =take_measurement(slist,"in2"); //color sensor in input2
@@ -119,21 +121,14 @@ void line_follow(dc_m *m,servo *s,sensor *slist)
 void obstacle_avoidance(dc_m *m,servo *s,sensor *slist)
 {
   //set gyroscope value..first of all callibrate
-  
-}
-float pid_controll(int8_t value)
-{
+  //check distance
+  int8_t distance=take_measurement(slist,"in3");
+  int8_t init_angle=take_measurement(slist,"in3"); //what's your direction
 
-  int8_t error=threshold_intensity-value;
-  integral+=error;
-  dirivative=error-last_error;
-  last_error=error;
 
-  turn_factor=(error*Kp+integral*Ki+dirivative*Kd)/threshold_intensity;
-
-  return turn_factor;
 
 }
+
 /**basicly it updates the value of the need sensor**/
 int8_t take_measurement(sensor *slist,char *input_name)
 {
@@ -150,4 +145,25 @@ int8_t take_measurement(sensor *slist,char *input_name)
       printf("Wrong input_name..\n");
       return(error_code); //error code
     }
+}
+
+/***tell me if i can go from that side*/
+int8_t movement_side(dc_m *m,servo *s,sensor *slist,int8_t pos,int8_t chanel_i)
+{
+    int8_t rv=false; //return value
+    turn(s,chanel_i,pos,servo_addr);
+    int8_t distance=take_measurement(slist,"in3"); //take measurement from sonar
+    if(distance>crash_dist)
+    {
+
+      run(m,(PWM_max/2),-PWM_max,dc_addr); //turn vehicle to that position..right
+      turn(s,chanel_i,init_pos,servo_addr); //turn servo straight forward
+      rv=true;
+    }
+    else
+    {
+      printf("I can't turn to that side..\n");
+      rv=false;
+    }
+    return(rv);
 }
