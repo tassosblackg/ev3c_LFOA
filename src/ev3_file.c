@@ -28,7 +28,7 @@ void writeData(char *fname,char *data)
     fp=fopen(fname,"w");
     if(fp!=NULL)
     {
-      fprintf(fp,"%s",data);
+      fprintf(fp,"%s",data); //change this 
     }
     else
       printf("ERROR FILE %s COULDN'T BE OPEN\n",fname);
