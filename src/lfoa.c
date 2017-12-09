@@ -26,11 +26,15 @@
 #define right_thres 26 // less than that                      (*)
 #define true 1
 #define false 0
+
+
 #include "ev3_all.h"
+
+/*fuctions headers*/
 void line_follow(dc_m *m,servo *s,sensor *slist);
 void obstacle_avoidance(dc_m *m,servo *s,sensor *slist);
 int8_t take_measurement(sensor *slist,char *input_name);
-int8_t movement_side(dc_m *m,servo *s,sensor *slist,int8_t pos,int8_t chanel_i);
+int8_t movement_side(dc_m *m,servo *s,sensor *slist,int8_t pos,int8_t chanel_i,int8_t Mr,int8_t Ml);
 
 int main()
 {
@@ -113,6 +117,7 @@ void line_follow(dc_m *m,servo *s,sensor *slist)
       else
       {
         //obstacle_avoidance
+        obstacle_avoidance(m,s,slist);
       }
     }
 
@@ -120,10 +125,31 @@ void line_follow(dc_m *m,servo *s,sensor *slist)
 
 void obstacle_avoidance(dc_m *m,servo *s,sensor *slist)
 {
+  //stop vehicle
+  stop(m,dc_addr);
   //set gyroscope value..first of all callibrate
   //check distance
   int8_t distance=take_measurement(slist,"in3");
   int8_t init_angle=take_measurement(slist,"in3"); //what's your direction
+  //1st turn right move forward
+  int8_t flag = movement_side(m,s,slist,turn_r,0,PWM_max/2,PWM_max); //1st servo chanel is 0
+  if(flag) //i can go so move forward
+  {
+      run(m,PWM_max,-PWM_max,dc_addr);
+  }
+  else
+     stop(m,dc_addr);
+  //2nd turn left and move forward
+  int8_t flag = movement_side(m,s,slist,turn_l,0,PWM_max,PWM_max/2); //1st servo chanel is 0
+  if(flag) //i can go so move forward
+  {
+      run(m,PWM_max,-PWM_max,dc_addr);
+  }
+  else
+     stop(m,dc_addr);
+  //3d turn left again
+
+  //4th turn right again
 
 
 
@@ -148,7 +174,7 @@ int8_t take_measurement(sensor *slist,char *input_name)
 }
 
 /***tell me if i can go from that side*/
-int8_t movement_side(dc_m *m,servo *s,sensor *slist,int8_t pos,int8_t chanel_i)
+int8_t movement_side(dc_m *m,servo *s,sensor *slist,int8_t pos,int8_t chanel_i,int8_t Mr,int8_t Ml)
 {
     int8_t rv=false; //return value
     turn(s,chanel_i,pos,servo_addr);
@@ -156,7 +182,7 @@ int8_t movement_side(dc_m *m,servo *s,sensor *slist,int8_t pos,int8_t chanel_i)
     if(distance>crash_dist)
     {
 
-      run(m,(PWM_max/2),-PWM_max,dc_addr); //turn vehicle to that position..right
+      run(m,Mr,-Ml,dc_addr); //turn vehicle to that position..right
       turn(s,chanel_i,init_pos,servo_addr); //turn servo straight forward
       rv=true;
     }
