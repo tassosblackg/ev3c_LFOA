@@ -141,7 +141,9 @@ void append2list(sensor **slist)
 
 void update_sensor_value(sensor *s)
 {
-		s->data=atoi(readData(s->fd)); //read from file where is the value data
+    
+    s->data=atoi(readData(s->fd)); //read from file where is the value data
+    printf("data=%d\n",s->data);
 }
 
 sensor *search4sensor(sensor *slist,char *port_name)
@@ -150,15 +152,15 @@ sensor *search4sensor(sensor *slist,char *port_name)
     tmp=slist;
     char *s1;
     int8_t length=strlen(port_name);
-    printf("SSport_name=%s\n",port_name);
-    printf("SS_LENGTHport_name=%d\n",strlen(port_name));
+    //printf("SSport_name=%s\n",port_name);
+    //printf("SS_LENGTHport_name=%d\n",strlen(port_name));
 		while(tmp!=NULL)
 		{
 
         s1=tmp->port;
-        printf("tmpA=%d\n",tmp);
-        printf("s1=%s\n",s1);
-	      printf("len(s1)=%d\n",strlen(s1));
+        //printf("tmpA=%d\n",tmp);
+        //printf("s1=%s\n",s1);
+	      //printf("len(s1)=%d\n",strlen(s1));
         /*we need strncmp because tmp->port has one more escape character
         **so we need to string to have the same length*/
         if((strncmp(s1,port_name,length)==0))//found

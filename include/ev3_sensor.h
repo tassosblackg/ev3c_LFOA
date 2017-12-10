@@ -36,7 +36,7 @@ typedef struct sens_struct{
   char *driver;		//sensor's driver name
   char* port; 		//in which port is bounded its sensor
   char* fd;	//filename where the data from sensor are stored
-  int8_t data;		//data read from file value0
+  int data;		//data read from file value0
 
   int32_t poll_time; 	//polling time
   char *mode; 		//using mode of sensor

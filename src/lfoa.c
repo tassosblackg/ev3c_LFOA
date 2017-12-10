@@ -34,7 +34,7 @@
 /*fuctions headers*/
 void line_follow(dc_m *m,servo *s,sensor *slist);
 void obstacle_avoidance(dc_m *m,servo *s,sensor *slist);
-int8_t take_measurement(sensor *slist,char *input_name);
+int take_measurement(sensor *slist,char *input_name);
 void avoid_circle(dc_m *m, servo *s,sensor *slist, char side); // side arg :=>'L':for left turn side,'R':for right
 int8_t movement_side(dc_m *m,servo *s,sensor *slist,int8_t pos,int8_t chanel_i,int8_t Mr,int8_t Ml);
 
@@ -56,9 +56,9 @@ int main()
         printf("everything is fine\n");
         turn(servo_node,0,init_pos,servo_addr);
         //line_follow(motors_node,servo_node,sensor_list);
-        sensor *s2;
-	      s2=search4sensor(sensor_list,sonar_in);
-	      printf("@s2=%d\n",s2);
+        //int dist=take_measurement(sensor_list,sonar_in);
+        //printf("#dist=%d\n",dist);
+
       }
       else
         printf("sensor_list not allocated..\n");
@@ -87,14 +87,14 @@ void line_follow(dc_m *m,servo *s,sensor *slist)
     while (1)
     {
 
-      int8_t distance =take_measurement(slist,sonar_in);  //sonar sensor
+      int distance =take_measurement(slist,sonar_in);  //sonar sensor
       if(distance==error_code) //read new value from sensor fails
         printf("Error in line_follow() distance=take_measurement\n");
       else//e2
       {
           if(distance>crash_dist) //it's safe ..not danger of crashing
           {//ifd
-            int8_t last_value =take_measurement(slist,color_in); //color sensor in input2
+            int last_value =take_measurement(slist,color_in); //color sensor in input2
             if(last_value==error_code)
               printf("Error in line_follow() last_value=take_measurement\n");
             else //e3
@@ -148,8 +148,8 @@ void obstacle_avoidance(dc_m *m,servo *s,sensor *slist)
   stop(m,dc_addr);
   //set gyroscope value..first of all callibrate
   //check distance
-  int8_t distance=take_measurement(slist,sonar_in);
-  int8_t init_angle=take_measurement(slist,gyro_in); //what's your direction
+  int distance=take_measurement(slist,sonar_in);
+  int init_angle=take_measurement(slist,gyro_in); //what's your direction
   if((distance ==error_code)||(init_angle==error_code))
     printf("Error in obstacle_avoidance() --take_measurement..\n");
   else
@@ -167,7 +167,7 @@ void obstacle_avoidance(dc_m *m,servo *s,sensor *slist)
 }
 
 /**basicly it updates the value of the need sensor**/
-int8_t take_measurement(sensor *slist,char *input_name)
+int take_measurement(sensor *slist,char *input_name)
 {
     int8_t value;
     sensor *node=NULL;
@@ -187,9 +187,9 @@ int8_t take_measurement(sensor *slist,char *input_name)
 /***tell me if i can go from that side*/
 int8_t movement_side(dc_m *m,servo *s,sensor *slist,int8_t pos,int8_t chanel_i,int8_t Mr,int8_t Ml)
 {
-    int8_t rv=false; //return value
+    int rv=false; //return value
     turn(s,chanel_i,pos,servo_addr);
-    int8_t distance=take_measurement(slist,sonar_in); //take measurement from sonar
+    int distance=take_measurement(slist,sonar_in); //take measurement from sonar
     if(distance==error_code)
         printf("Error in movement_side() take_measurement..\n");
     else
