@@ -11,7 +11,6 @@
 **!!!IMPORTANT: set mode on the ev3 port ,where you have connected controllers
 ** set ev3 input4(in our case) mode :ntx-i2c
 **-----------------------------------------------------------------------------
-
 **Cross-Compile with Docker: docker run --rm --it -v /c/Users/myname/example/:/src -w /src ev3cc
 **look at : HitechnicDoc folder
 **for More abut I2C **/
@@ -26,7 +25,9 @@
 #define right_thres 26 // less than that                      (*)
 #define true 1
 #define false 0
-
+#define sonar_in "in3"
+#define color_in "in2"
+#define gyro_in "in1"
 
 #include "../include/ev3_all.h"
 
@@ -56,7 +57,7 @@ int main()
         turn(servo_node,0,init_pos,servo_addr);
         //line_follow(motors_node,servo_node,sensor_list);
         sensor *s2;
-	      s2=search4sensor(sensor_list,"in3");
+	      s2=search4sensor(sensor_list,sonar_in);
 	      printf("@s2=%d\n",s2);
       }
       else
@@ -86,14 +87,14 @@ void line_follow(dc_m *m,servo *s,sensor *slist)
     while (1)
     {
 
-      int8_t distance =take_measurement(slist,"in3");  //sonar sensor
+      int8_t distance =take_measurement(slist,sonar_in);  //sonar sensor
       if(distance==error_code) //read new value from sensor fails
         printf("Error in line_follow() distance=take_measurement\n");
       else//e2
       {
           if(distance>crash_dist) //it's safe ..not danger of crashing
           {//ifd
-            int8_t last_value =take_measurement(slist,"in2"); //color sensor in input2
+            int8_t last_value =take_measurement(slist,color_in); //color sensor in input2
             if(last_value==error_code)
               printf("Error in line_follow() last_value=take_measurement\n");
             else //e3
@@ -147,8 +148,8 @@ void obstacle_avoidance(dc_m *m,servo *s,sensor *slist)
   stop(m,dc_addr);
   //set gyroscope value..first of all callibrate
   //check distance
-  int8_t distance=take_measurement(slist,"in3");
-  int8_t init_angle=take_measurement(slist,"in3"); //what's your direction
+  int8_t distance=take_measurement(slist,sonar_in);
+  int8_t init_angle=take_measurement(slist,gyro_in); //what's your direction
   if((distance ==error_code)||(init_angle==error_code))
     printf("Error in obstacle_avoidance() --take_measurement..\n");
   else
@@ -188,7 +189,7 @@ int8_t movement_side(dc_m *m,servo *s,sensor *slist,int8_t pos,int8_t chanel_i,i
 {
     int8_t rv=false; //return value
     turn(s,chanel_i,pos,servo_addr);
-    int8_t distance=take_measurement(slist,"in3"); //take measurement from sonar
+    int8_t distance=take_measurement(slist,sonar_in); //take measurement from sonar
     if(distance==error_code)
         printf("Error in movement_side() take_measurement..\n");
     else

@@ -4,7 +4,7 @@
 
 
 
-#include "ev3_sensor.h"
+#include "../include/ev3_sensor.h"
 
 
 /****-----------------|functions|------------------------------------------------------------------------**/
@@ -146,17 +146,31 @@ void update_sensor_value(sensor *s)
 
 sensor *search4sensor(sensor *slist,char *port_name)
 {
-		sensor *node=NULL,*tmp=slist;
-		uint8_t i;
-		for( i=1;i<=numbOfSen;i++) ///checkkk i=0 h 1
+		sensor *node=NULL,*tmp=NULL;
+    tmp=slist;
+    char *s1;
+    int8_t length=strlen(port_name);
+    printf("SSport_name=%s\n",port_name);
+    printf("SS_LENGTHport_name=%d\n",strlen(port_name));
+		while(tmp!=NULL)
 		{
-				if(strcmp(tmp->port,port_name)==0 )
-				{
-						node=tmp;
-						break;
-				}
-				else
-						tmp=tmp->next;
+
+        s1=tmp->port;
+        printf("tmpA=%d\n",tmp);
+        printf("s1=%s\n",s1);
+	      printf("len(s1)=%d\n",strlen(s1));
+        /*we need strncmp because tmp->port has one more escape character
+        **so we need to string to have the same length*/
+        if((strncmp(s1,port_name,length)==0))//found
+        {
+          node=tmp;
+          printf("FOUND..\n");
+          break;
+        }
+        else
+        {
+          tmp=tmp->next;
+        }
 		}
 		return node;
 }
