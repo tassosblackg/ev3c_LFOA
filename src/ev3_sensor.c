@@ -4,7 +4,7 @@
 
 
 
-#include "ev3_sensor.h"
+#include "../include/ev3_sensor.h"
 
 
 /****-----------------|functions|------------------------------------------------------------------------**/
@@ -32,9 +32,11 @@ int8_t  countSensors()
 
 }
 
-char *chpath(char *init_path,int8_t length_dn,int8_t lenght_up,char *str_add)
+char *chpath(char *init_path,int8_t lenght_up,char *str_add)
 {
-    int8_t str_size = strlen(init_path)-length_dn+lenght_up+1;//set the right size of string
+    printf("path=%s\n",init_path);
+    int8_t str_size = strlen(init_path)+lenght_up+1;//set the right size of string
+    printf("str-size=%d\n",str_size);
     char *strR =(char*)malloc(str_size);
     strcpy(strR,init_path);
     strcat(strR,str_add);
@@ -42,51 +44,53 @@ char *chpath(char *init_path,int8_t length_dn,int8_t lenght_up,char *str_add)
     return strR;
 }
 
-sensor *load_sensor(uint8_t fn)
+void load_sensor(uint8_t fn,sensor **sensor_node)
 {
-    sensor *sensor_node=(sensor*)malloc(sizeof(sensor));
-		if(sensor_node==NULL)
-			printf("error memory allocation..load_sensor");
 
+
+    printf("sensor_nod=%d\n",(*sensor_node) );
     int8_t name_s=strlen(fullpath)+2;
     char *sensor_name=(char*)malloc(name_s);
     char *itoa=(char*)malloc(sizeof(int8_t));
     sprintf(itoa,"%d",fn);          //int to string
     strcpy(sensor_name,fullpath);  //copy fullpath string to a new variable
     strcat(sensor_name,itoa);     //concat fullpath with sensor name
+    free(itoa);
     char *filep=NULL;
     /*read driver_name*/
-    filep=chpath(sensor_name,0,strlen(driverf),driverf);
+    filep=chpath(sensor_name,strlen(driverf),driverf);
     printf("1chpath=%s\n",filep);
-    sensor_node->driver =readData(filep);
+    (*sensor_node)->driver =readData(filep); //<-okk ****DEBUG
+    printf("DRIVERPathlen=%d\n",strlen(filep));
+    printf("PORT_len=%d\n",strlen(portf));
     /*set_identifier*/
     /*filep=chpath(sensor_name,stlen(driverf),strlen(),);
-    sensor_node->id=get_sensor_id(readData(filep));*/
+    (*sensor_node)->id=get_sensor_id(readData(filep));*/
     /*set port*/
-    filep=chpath(sensor_name,strlen(sensor_node->driver),strlen(portf),portf);
-    sensor_node->port=readData(filep);
+    filep=chpath(sensor_name,strlen(portf),portf);
+    (*sensor_node)->port=readData(filep);
     printf("2chpath=%s\n",filep);
     /*set fd*/
-		filep=chpath(sensor_name,strlen(portf),strlen(dataf),dataf);
-		sensor_node->fd=filep;
+		filep=chpath(sensor_name,strlen(dataf),dataf);
+		(*sensor_node)->fd=filep;
     printf("3chpath=%s\n",filep);
-    /*set data*/
-    filep=chpath(sensor_name,strlen(portf),strlen(dataf),dataf);
-    sensor_node->data=atoi(readData(filep));
+    (*sensor_node)->data=atoi(readData(filep));
     printf("4chpath=%s\n",filep);
     /*set poll time*/
-    filep=chpath(sensor_name,strlen(dataf),strlen(pollf),pollf);
-    sensor_node->poll_time=atoi(readData(filep));
+    //filep=chpath(sensor_name,strlen(pollf),pollf);
+    //(*sensor_node)->poll_time=atoi(readData(filep));
     printf("5chpath=%s\n",filep);
     /*set mode*/
-    filep=chpath(sensor_name,strlen(pollf),strlen(modef),modef);
-    sensor_node->mode= readData(filep);
+    filep=chpath(sensor_name,strlen(modef),modef);
+    (*sensor_node)->mode= readData(filep);
     printf("6chpath=%s\n",filep);
 
     /*set next node's pointer*/
-    sensor_node->next=NULL; //init state
+    (*sensor_node)->next=NULL; //init state
+    printf("NNext=%d",(*sensor_node)->next);
+    free(sensor_name);
+    printf("free is ok..in load sensor");
 
-		return sensor_node;
 
 }
 
@@ -94,43 +98,81 @@ void append2list(sensor **slist)
 {
 		numbOfSen=countSensors(); //number of coonected sensors
     printf("There are %d sensors connected..\n",numbOfSen);
+    (*slist)=(sensor *)malloc(sizeof(sensor)*numbOfSen); //allocate the right size of memory
+    sensor *tmp=NULL;
+    if((*slist)==NULL)
+      printf("error sensor_list allocation in append..\n");
 		uint8_t i;
-		for(i=1;i<=numbOfSen;i++)
+    printf("before for...\n");
+		for(i=0;i<numbOfSen;i++)
 		{
-				sensor *tmp=NULL,*node=NULL;
+
+        printf("in for..i=%d\n",i);
 				// sensor *node=(sensor*)malloc(sizeof(sensor)); //alocate mem for a sensor node
-				node=load_sensor(i);
+        //checkare pws metavaineis apo enan komvo ston kainourgio??
+        //prepei na dhmiourgeis kainourgio node kai na to prostheteis sthn lista
+        sensor *node=(sensor *)malloc(sizeof(sensor)); //create a sensor node
+        if(node==NULL)
+          printf("error durin node allocation...in append\n");
+				load_sensor(i,&node);    //add sensor data in the node
+        printf("NN=%d\n",node);
 				if(i==0)
 				{
-						(*slist)=node;	//head of list
+            printf("II0\n");
+            (*slist)=node;	//head of list
+            printf("slist=%d\n",(*slist) );
 						tmp=node;
+            printf("tmp=%d\n",tmp);
 				}
 				else
 				{
-						tmp->next=node;
+            printf("II>0\n");
+            printf("tmpII>0=%d\n",tmp);
+            tmp->next=node;
+            printf("ddddsss\ntmp=%d\n",tmp->next);
 						tmp=node;
+            printf("new tmp=%d\n",tmp);
 				}
+        //free(node); //free space for node..so it's can be reallocate
+        printf("telos epanalh4hs\n");
 		}
+
 }
 
 void update_sensor_value(sensor *s)
 {
-		s->data=atoi(readData(s->fd)); //read from file where is the value data
+    
+    s->data=atoi(readData(s->fd)); //read from file where is the value data
+    printf("data=%d\n",s->data);
 }
 
 sensor *search4sensor(sensor *slist,char *port_name)
 {
-		sensor *node=NULL,*tmp=slist;
-		uint8_t i;
-		for( i=1;i<=numbOfSen;i++)
+		sensor *node=NULL,*tmp=NULL;
+    tmp=slist;
+    char *s1;
+    int8_t length=strlen(port_name);
+    //printf("SSport_name=%s\n",port_name);
+    //printf("SS_LENGTHport_name=%d\n",strlen(port_name));
+		while(tmp!=NULL)
 		{
-				if(strcmp(tmp->port,port_name)==0 )
-				{
-						node=tmp;
-						break;
-				}
-				else
-						tmp=tmp->next;
+
+        s1=tmp->port;
+        //printf("tmpA=%d\n",tmp);
+        //printf("s1=%s\n",s1);
+	      //printf("len(s1)=%d\n",strlen(s1));
+        /*we need strncmp because tmp->port has one more escape character
+        **so we need to string to have the same length*/
+        if((strncmp(s1,port_name,length)==0))//found
+        {
+          node=tmp;
+          printf("FOUND..\n");
+          break;
+        }
+        else
+        {
+          tmp=tmp->next;
+        }
 		}
 		return node;
 }
