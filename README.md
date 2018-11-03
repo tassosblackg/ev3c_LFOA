@@ -3,6 +3,7 @@
 An Implementation for ev3 mindstorm.
 
 Libs for each sensor, motor etc and an simple example of line following and obstacle avoidance code.
+
 ---------------------------------------------------------------------------------------------
 Main Project(ALL you need):
 ---------------------------
@@ -28,5 +29,5 @@ READ carefully the block comments in each file.
 
 Feel free to contact me: soylis.k@gmail.com
 
-#PEACE OUT!
+# PEACE OUT!
 ---------------------------------------------------------------------------------------------
