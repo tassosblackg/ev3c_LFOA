@@ -1,6 +1,6 @@
 /**ev3_LCD.h ih header file for lcd FUNCTIONS
 **is part of general libs for ev3 lfoa project
-**author:soyliK <soylis.k@gmail.com>
+**author:soylisK <soylis.k@gmail.com>
 **/
 
 #ifndef EV3_LCD

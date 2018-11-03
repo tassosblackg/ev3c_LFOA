@@ -1,6 +1,6 @@
 /** LineFollowning and ObstacleAvoidance aka LFOA
 **using ev3dev os see ev3dev.org
-**author:elAsos
+**author:soylisK <soylis.k@gmail.com>
 **
 */
 /*ev3_all.h is the top level header file of */

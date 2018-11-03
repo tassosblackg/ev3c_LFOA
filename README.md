@@ -1,10 +1,32 @@
 # ev3c_LFOA
 
+An Implementation for ev3 mindstorm.
+
+Libs for each sensor, motor etc and an simple example of line following and obstacle avoidance code.
 ---------------------------------------------------------------------------------------------
-USE include/ ,src/ and Makefile to run the programm
+Main Project(ALL you need):
+---------------------------
+ * include/
+ * src/
+ * Makefile
+ to run the programm
 
-if you want to create your own delete lfoa.c and create your own by using my libs
+Notice:
+-------
+You can re-write LineFollowning and obstacle avoidance code as you wish (just ignore lfoa.c file).
 
-READ carefully the block comments in each file
+lfoa.c is a sample code to guide you through using libs for building a project on ev3.
 
+To Do List(Extend functionallity):
+-----------
+ * ev3_button
+
+ * ev3_LCD
+
+______________________________________________
+READ carefully the block comments in each file.
+
+Feel free to contact me: soylis.k@gmail.com
+
+#PEACE OUT!
 ---------------------------------------------------------------------------------------------

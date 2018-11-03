@@ -1,9 +1,9 @@
 /**Main programm of Line Following & Obstacle Avoidance  (aka lfoa ) project
 **is based on ev3dev os developed by ev3dev.org
-**it's implements basic functionallity of different components(color sensor,servo,dc-motors)
+**it implements basic functionallity of different components(color sensor,servo,dc-motors)
 ** testing for white line Following ...if you change color line you must change conditions in line_follow()
 ** change thresholds so to fit in your case see (*) points in code
-**author:soyliK <soylis.k@gmail.com>
+**author:soylisK <soylis.k@gmail.com>
 **/
 
 /**set address for each controller in Daisy Chain connection**
@@ -113,7 +113,7 @@ void line_follow(dc_m *m,servo *s,sensor *slist)
 		            /******************************************************************************/
                 if(last_value>=threshold_intensity) //forward
                 {
-                              int Mr=turn_factor*PWM_max;
+                  int Mr=turn_factor*PWM_max;
 		              int Ml=turn_factor*PWM_max;
 		              run(m,Mr,Ml,dc_addr);
 
@@ -137,20 +137,20 @@ void line_follow(dc_m *m,servo *s,sensor *slist)
                     }
                     else if ((last_error>=left_thres)&&(last_error<threshold_intensity)) //out from left
                     {
-                        //turn to the right
-                        run(m,turn_factor*PWM_max,-PWM_max,dc_addr);
+                      //turn to the right
+                      run(m,turn_factor*PWM_max,-PWM_max,dc_addr);
                     }
                     else if ((last_error>out_line)&&(last_error<=right_thres)) //out from right
                     {
-                        float Ml=turn_factor*PWM_max;
-                        //turn to the left
-                        run(m,PWM_max,-Ml,dc_addr);
+                      float Ml=turn_factor*PWM_max;
+                      //turn to the left
+                      run(m,PWM_max,-Ml,dc_addr);
                     }
                     else if(last_error>=threshold_intensity) //was on the line moving straight frwd, but now I'm not
                     {
-                        //random turn ..in our case left turn is our need..left turn
-			float sub=PWM_max*turn_factor;
-                        run(m,turn_factor*PWM_max,-PWM_max,dc_addr); //90 dgr rotation to left
+                      //random turn ..in our case left turn is our need..left turn
+		                  float sub=PWM_max*turn_factor;
+                      run(m,turn_factor*PWM_max,-PWM_max,dc_addr); //90 dgr rotation to left
                     }
                     else
                       printf("ERROR YOU ARE OUT of line intensity=%d\n",last_value);
@@ -200,11 +200,11 @@ void obstacle_avoidance(dc_m *m,servo *s,sensor *slist)
       stop(m,dc_addr);
       //hope that I avoid obstacle
       int intens=0;
-       do
-	{
-     		 run(m,PWM_max,-PWM_max,dc_addr); //move forward --hope to find line
-            	 intens=take_measurement(slist,color_in);
-	}while(intens!=threshold_intensity); //till found line back	
+  do{
+ 		 run(m,PWM_max,-PWM_max,dc_addr); //move forward --hope to find line
+     intens=take_measurement(slist,color_in);
+	}while(intens!=threshold_intensity); //till found line back
+
   }
 }
 
@@ -238,7 +238,6 @@ int8_t movement_side(dc_m *m,servo *s,sensor *slist,int8_t pos,int8_t chanel_i,i
     {
         if(distance>crash_dist)
         {
-
           run(m,Mr,-Ml,dc_addr); //turn vehicle to that position..right
           turn(s,chanel_i,init_pos,servo_addr); //turn servo straight forward
           rv=true;
