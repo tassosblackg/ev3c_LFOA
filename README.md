@@ -29,5 +29,7 @@ READ carefully the block comments in each file.
 
 Feel free to contact me: soylis.k@gmail.com
 
+More infos for ev3dev see: https://www.ev3dev.org
+
 # PEACE OUT!
 ---------------------------------------------------------------------------------------------
