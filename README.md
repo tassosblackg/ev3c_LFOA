@@ -25,6 +25,8 @@ To Do List(Extend functionallity):
  * ev3_LCD
 
 ______________________________________________
+READ quick guide for a fast set up and use.
+
 READ carefully the block comments in each file.
 
 Feel free to contact me: soylis.k@gmail.com
