@@ -1,0 +1,48 @@
+--------------------------------------------------------------------------------------------------------------------------------------
+
+# EV3 How to.. Quick Guide #
+
+--------------------------------------------------------------------------------------------------------------------------------------
+
+#| First Thing FIRST |
+
+Use eve3dev => debian linux distro for ev3 mindstrorm
+1) Download image file (.iso) : https://github.com/ev3dev/ev3dev/releases/download/ev3dev-jessie-2017-09-14/ev3dev-jessie-ev3-generic-2017-09-14.zip
+2) Downolad etcher burner for images (see https://github.com/balena-io/etcher)
+3) Use a sd card to burn image file.
+
+Your OS is ready to use, put the sd card to the brick and try to boot you'll see brickman booting pushing the middle square button.
+
+Check here for more informations - tutorials : https://www.ev3dev.org/docs/tutorials/
+
+--------------------------------------------------------------------------------------------------------------------------------------
+
+#| How to write code and build projects |#
+->| You will need to install a ssh server to your pc. see here http://ubuntuhandbook.org/index.php/2016/04/enable-ssh-ubuntu-16-04-lts/
+
+1) You will need a usb wifi dogle (We used TP-Link TL-WN725N). (You can see more specifications in : https://www.ev3dev.org/docs/networking/  ) in order to conect Ev3 brick to lan connection. 
+
+2) Connect ev3 brick to wifi. First open brick, go to "Wireless and Networking" > " Wi-fi " > Connect to desired network. See the ip it gets on the left top corner! 
+
+3) a.| Use 'ssh username@ip' to connect from your pc to the ev3 brick.
+   b.| accept handshake 'yes'.
+   c.| insert password.
+
+	   By deafult:
+	   -----------
+	__________________
+	|username: robot |
+	----------------
+	|password: maker |
+	-----------------
+
+4) Write your code to your pc and when you're ready pass it to ev3 brick. Use 'scp' comand (secure shell copy files), to copy files in the brick.
+
+5) Last but not least it's recommended to use Makefile technique to create your files' directory. ( Google it if you dont know how.. )
+
+6) Run your project. 
+
+
+*********************************
+
+More infos see documentation and tutorials at : https://www.ev3dev.org/ 
