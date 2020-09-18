@@ -4,8 +4,14 @@ An Implementation for ev3 mindstorm.
 
 Libs for each sensor, motor etc and an simple example of line following and obstacle avoidance code.
 
+Implemented Modules:
+---------------------
+- [x] **Hitechnic DC Motors** (***I2C protocol***)
+- [x] **Hitechnic Servo Motor** (***I2C protocol***)
+- [x] **Lego Sensors** like color sesnor, sonar, etc.
+
 ---------------------------------------------------------------------------------------------
-Main Project(ALL you need):
+Main Project (ALL you need):
 ---------------------------
  * include/
  * src/
@@ -14,15 +20,15 @@ Main Project(ALL you need):
 
 Notice:
 -------
-You can re-write LineFollowning and obstacle avoidance code as you wish (just ignore lfoa.c file).
+You can re-write LineFollowning and obstacle avoidance code as you wish (just ignore ~~***lfoa.c***~~ file).
 
-lfoa.c is a sample code to guide you through using libs for building a project on ev3.
+***lfoa.c*** is a sample code to guide you through using libs for building a project on ev3. See it as an example on how to use the different modules.
 
-To Do List(Extend functionallity):
+To Do List (Extend functionallity):
 -----------
- * ev3_button
+ - [ ] ev3_button
 
- * ev3_LCD
+ - [ ] ev3_LCD
 
 ______________________________________________
 READ quick guide for a fast set up and use.
