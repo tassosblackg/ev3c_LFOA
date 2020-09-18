@@ -4,40 +4,54 @@ An Implementation for ev3 mindstorm.
 
 Libs for each sensor, motor etc and an simple example of line following and obstacle avoidance code.
 
-Implemented Modules:
+:large_orange_diamond: Implemented Modules:
 ---------------------
-- [x] **Hitechnic DC Motors** (***I2C protocol***)
-- [x] **Hitechnic Servo Motor** (***I2C protocol***)
-- [x] **Lego Sensors** like color sesnor, sonar, etc.
+:ballot_box_with_check: **Hitechnic DC Motors** (***I2C protocol***)
+
+:ballot_box_with_check: **Hitechnic Servo Motor** (***I2C protocol***)
+
+:ballot_box_with_check: **Lego Sensors** like color sesnor, sonar, etc.
 
 ---------------------------------------------------------------------------------------------
-Main Project (ALL you need):
+:large_orange_diamond: Main Project (ALL you need):
 ---------------------------
  * include/
  * src/
  * Makefile
  to run the programm
 
-Notice:
+:bangbang: Notice :bangbang: :
 -------
 You can re-write LineFollowning and obstacle avoidance code as you wish (just ignore ~~***lfoa.c***~~ file).
 
 ***lfoa.c*** is a sample code to guide you through using libs for building a project on ev3. See it as an example on how to use the different modules.
 
-To Do List (Extend functionallity):
+:small_red_triangle_down: To Do List :construction: :
 -----------
  - [ ] ev3_button
 
  - [ ] ev3_LCD
+ 
+ :large_orange_diamond: Show Room :tv::tada: :
+ ------------
+ ![Vehicle View Top Down](media-files/IMG_20180702_190654.jpg)
+ 
+ :sparkles:***Example Sonar-Obstacle Avoid -->***
+ 
+ ![Moving-Stop](media-files/Tdgu2fSVTr.gif)
+ 
+ :sparkles:***ARM Servo Motion***
+ 
+ ![Axis-Motion-ARM](media-files/oVXPALLY5k.gif)
 
 ______________________________________________
-READ quick guide for a fast set up and use.
+:warning: READ quick guide for a fast set up and use.
 
-READ carefully the block comments in each file.
+:warning: READ carefully the block comments in each file.
 
-Feel free to contact me: soylis.k@gmail.com
+:mailbox_with_mail: soylis.k@gmail.com
 
 More infos for ev3dev see: https://www.ev3dev.org
 
-# PEACE OUT!
+ # :godmode: PEACE OUT! :sunglasses:
 ---------------------------------------------------------------------------------------------
