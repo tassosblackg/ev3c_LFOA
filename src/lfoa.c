@@ -149,7 +149,7 @@ void line_follow(dc_m *m,servo *s,sensor *slist)
                     else if(last_error>=threshold_intensity) //was on the line moving straight frwd, but now I'm not
                     {
                       //random turn ..in our case left turn is our need..left turn
-		                  float sub=PWM_max*turn_factor;
+		      float sub=PWM_max*turn_factor;
                       run(m,turn_factor*PWM_max,-PWM_max,dc_addr); //90 dgr rotation to left
                     }
                     else
