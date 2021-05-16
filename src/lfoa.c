@@ -199,12 +199,14 @@ void obstacle_avoidance(dc_m *m,servo *s,sensor *slist)
       run(m,PWM_max-1,-PWM_max+1,dc_addr); //mv forward a little
       stop(m,dc_addr);
       //hope that I avoid obstacle
-      int intens=0;
-  do
-  {
-	run(m,PWM_max,-PWM_max,dc_addr); //move forward --hope to find line
-     	intens=take_measurement(slist,color_in);
-  }while(intens!=threshold_intensity); //till found line back
+  }  
+  int intens=0;
+  
+  do{
+      run(m,PWM_max,-PWM_max,dc_addr); //move forward --hope to find line
+      intens=take_measurement(slist,color_in);
+    
+  } while(intens!=threshold_intensity); //till found line back
 
   }
 }
