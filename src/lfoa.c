@@ -113,9 +113,9 @@ void line_follow(dc_m *m,servo *s,sensor *slist)
 		            /******************************************************************************/
                 if(last_value>=threshold_intensity) //forward
                 {
-                  int Mr=turn_factor*PWM_max;
-		              int Ml=turn_factor*PWM_max;
-		              run(m,Mr,Ml,dc_addr);
+		  int Mr=turn_factor*PWM_max;
+		  int Ml=turn_factor*PWM_max;
+		  run(m,Mr,Ml,dc_addr);
 
                 }
                 if((last_value<left_thres) &&(last_value>out_line)) //right out
@@ -200,10 +200,11 @@ void obstacle_avoidance(dc_m *m,servo *s,sensor *slist)
       stop(m,dc_addr);
       //hope that I avoid obstacle
       int intens=0;
-  do{
- 		 run(m,PWM_max,-PWM_max,dc_addr); //move forward --hope to find line
-     intens=take_measurement(slist,color_in);
-	}while(intens!=threshold_intensity); //till found line back
+  do
+  {
+	run(m,PWM_max,-PWM_max,dc_addr); //move forward --hope to find line
+     	intens=take_measurement(slist,color_in);
+  }while(intens!=threshold_intensity); //till found line back
 
   }
 }
